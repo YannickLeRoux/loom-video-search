@@ -1,7 +1,7 @@
 module Web.Controller.LoomVideos where
 
 import Web.Controller.Prelude
-import Web.View.LoomVideos.Edit
+import Web.View.LoomVideos.Edit (EditView (EditView, loomVideo))
 import Web.View.LoomVideos.Index
 import Web.View.LoomVideos.New
 import Web.View.LoomVideos.Show (ShowView (ShowView, loomVideo))
@@ -11,9 +11,9 @@ instance Controller LoomVideosController where
     loomVideos <- query @LoomVideo |> orderByDesc #createdat |> fetch
     render IndexView {..}
   action SearchLoomVideosAction = do
-    let search = param @Text "video-search"
-    let q = query "SELECT * FROM loom_videos WHERE " ++ search ++ " in title"
-    loomVideos <- sqlQuery q ()
+    let search = param @Text "video-search" |> toLower
+    if (search == "") then redirectTo LoomVideosAction else return ()
+    loomVideos <- query @LoomVideo |> filterWhereIn (#title, [toLower search]) |> orderByDesc #createdat |> fetch
     render IndexView {..}
   action NewLoomVideoAction = do
     let loomVideo = newRecord

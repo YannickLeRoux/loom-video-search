@@ -16,8 +16,12 @@ instance View IndexView ViewContext where
         </nav>
         <h1>Index <a href={pathTo NewLoomVideoAction} class="btn btn-primary ml-4">+ New</a></h1>
         <form method="POST" action={SearchLoomVideosAction}>
-            <input type="search" name="video-search" />
-            <button type="submit">Search</button>
+        <div class="input-group mb-3">
+            <input class="form-control" type="search" name="video-search" />
+            <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </div>
+        </div>
         </form>
         <div class="table-responsive">
             <table class="table">
